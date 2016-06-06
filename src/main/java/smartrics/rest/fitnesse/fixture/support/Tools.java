@@ -582,6 +582,28 @@ public final class Tools {
         return "<a href='" + href + "'>" + text + "</a>";
     }
 
+
+    public static String insertShyLinebreaks(String s) {
+        StringBuffer sb = new StringBuffer();
+        final int maxWordLength = 80;
+        int wordLength = 0;
+        for (int i = 0 ; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == ' ' || c == '\n' || c == '\r') {
+                wordLength = 0;
+            } else if (wordLength == maxWordLength) {
+                wordLength = 0;
+                sb.append("&shy;");
+            } else {
+                wordLength++;
+            }
+
+            sb.append(c);
+        }
+
+        return sb.toString();
+    }
+
     /**
      * @param expected        the expected value
      * @param typeAdapter     the body adapter for the cell
@@ -604,7 +626,7 @@ public final class Tools {
             if (minLenForToggle >= 0 && actual.length() > minLenForToggle) {
                 sb.append(makeToggleCollapseable("toggle actual", toHtml(actual)));
             } else {
-                sb.append(toHtml(actual));
+                sb.append(toHtml(insertShyLinebreaks(actual)));
             }
             sb.append(toHtml("\n"));
             sb.append(formatter.label("actual"));
@@ -614,7 +636,7 @@ public final class Tools {
             sb.append(toHtml("-----"));
             sb.append(toHtml("\n"));
             for (String e : errors) {
-                sb.append(toHtml(e + "\n"));
+                sb.append(toHtml(insertShyLinebreaks(e) + "\n"));
             }
             sb.append(toHtml("\n"));
             sb.append(formatter.label("errors"));
@@ -646,7 +668,7 @@ public final class Tools {
             if (minLenForToggle >= 0 && actual.length() > minLenForToggle) {
                 sb.append(makeToggleCollapseable("toggle actual", toHtml(actual)));
             } else {
-                sb.append(toHtml(actual));
+                sb.append(toHtml(insertShyLinebreaks(actual)));
             }
             sb.append(toHtml("\n"));
             sb.append(formatter.label("actual"));
